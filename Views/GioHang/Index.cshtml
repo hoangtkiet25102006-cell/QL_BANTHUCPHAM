@@ -2,56 +2,78 @@
 
 <div class="container my-5">
     <h2 class="text-success fw-bold mb-4">🛒 Giỏ hàng của bạn</h2>
-
-    @if (Model == null || !Model.Any())
-    {
-        <div class="alert alert-info">Giỏ hàng của bạn đang trống. Hãy tiếp tục mua sắm nhé!</div>
-        <a href="/SanPham" class="btn btn-primary">Quay lại mua sắm</a>
-    }
-    else
-    {
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Hình ảnh</th>
-                    <th>Sản phẩm</th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng</th>
-                    <th>Thành tiền</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    // Gán id="row-@item.MaSanPham" để JS tìm thấy và xóa
-                    <tr id="row-@item.MaSanPham">
-                        <td><img src="~/Images/@item.HinhAnh" width="60" class="rounded" /></td>
-                        <td>@item.TenSanPham</td>
-                        <td>@item.GiaBan.ToString("#,##0") đ</td>
-                        <td>
-                            <input type="text" class="qty-input" value="@item.SoLuong" readonly style="width: 40px; text-align: center;">
-                        </td>
-                        <td class="fw-bold text-danger">@item.ThanhTien.ToString("#,##0") đ</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning" onclick="updateCart(@item.MaSanPham, -1, 'row-@item.MaSanPham')">-</button>
-                            <button class="btn btn-sm btn-danger" onclick="updateCart(@item.MaSanPham, -99, 'row-@item.MaSanPham')">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
+    <div id="cart-content-area" style="min-height: 400px;">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info">Giỏ hàng của bạn đang trống. Hãy tiếp tục mua sắm nhé!</div>
+            <a href="/SanPham" class="btn btn-primary">Quay lại mua sắm</a>
+        }
+        else
+        {
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th>Thao tác</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        
-        <div class="text-end mt-4">
-            <h4>Tổng cộng: <span class="text-danger fw-bold">@Model.Sum(x => x.ThanhTien).ToString("#,##0") đ</span></h4>
-            <a href="/ThanhToan/Index" class="btn btn-success btn-lg px-5">Tiến hành thanh toán</a>
-        </div>
-    }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        // Gán id="row-@item.MaSanPham" để JS tìm thấy và xóa
+                        <tr id="row-@item.MaSanPham" data-price="@item.GiaBan">
+                            <td><img src="~/Images/@item.HinhAnh" width="60" class="rounded" /></td>
+                            <td>@item.TenSanPham</td>
+                            <td>@item.GiaBan.ToString("#,##0") đ</td>
+                            <td>
+                                <input type="text" class="qty-input" value="@item.SoLuong" readonly style="width: 40px; text-align: center;">
+                            </td>
+                            <td class="price-item fw-bold text-danger">@item.ThanhTien.ToString("#,##0") đ</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" onclick="updateCart(@item.MaSanPham, -1, 'row-@item.MaSanPham')">-</button>
+                                <button class="btn btn-sm btn-danger" onclick="updateCart(@item.MaSanPham, -99, 'row-@item.MaSanPham')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            <div class="text-end mt-4">
+                <h4>Tổng cộng: 
+                    <span id="grand-total" class="text-danger fw-bold">
+                        @Model.Sum(x => x.ThanhTien).ToString("#,##0") đ
+                    </span>
+                </h4>
+                <a href="/ThanhToan/Index" class="btn btn-success btn-lg px-5">Tiến hành thanh toán</a>
+            </div>
+        }
+    </div>
 </div>
 
 <script>
+    // Hàm tạo và hiển thị thông báo
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        container.innerHTML = ''; // Xóa thông báo cũ
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-message';
+        toast.innerText = message;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+
+    // Hàm cập nhật giỏ hàng chính
     function updateCart(maSanPham, delta, rowId) {
         fetch('/GioHang/UpdateCart', {
             method: 'POST',
@@ -64,22 +86,53 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // 1. Cập nhật icon giỏ hàng trên navbar
-                const cartCount = document.getElementById('cart-count');
-                if(cartCount) cartCount.innerText = data.totalItems;
+                $('.cart-count').text(data.totalItems);
                 
-                // 2. Xử lý xóa hoặc giảm số lượng
                 let row = document.getElementById(rowId);
-                if (delta === -99 || parseInt(row.querySelector('.qty-input').value) + delta <= 0) {
-                    row.remove(); // Xóa khỏi bảng
+                let qtyInput = row.querySelector('.qty-input');
+                let newQty = parseInt(qtyInput.value) + delta;
+                
+                if (delta === -99 || newQty <= 0) {
+                    row.remove(); 
                 } else {
-                    let qtyInput = row.querySelector('.qty-input');
-                    qtyInput.value = parseInt(qtyInput.value) + delta;
+                    qtyInput.value = newQty;
+                    let price = parseFloat(row.getAttribute('data-price'));
+                    row.querySelector('.price-item').innerText = (newQty * price).toLocaleString('vi-VN') + ' đ';
                 }
                 
-                // 3. (Tùy chọn) Reload trang hoặc dùng JS tính lại tổng tiền để tránh sai sót
-                location.reload(); 
+                // Hiển thị thông báo khi cập nhật thành công
+                showToast("Cập nhật giỏ hàng thành công!");
+                
+                // Gọi hàm tính toán tổng tiền
+                calculateTotal(); 
             }
         });
+    }
+
+    function calculateTotal() {
+        let grandTotal = 0;
+        let rows = document.querySelectorAll('tbody tr');
+        
+        if (rows.length === 0) {
+            let area = document.getElementById('cart-content-area');
+            // Kiểm tra để tránh thêm thông báo trùng lặp nhiều lần
+            if (!document.getElementById('empty-msg')) {
+                document.querySelector('table').style.display = 'none';
+                document.querySelector('.text-end').style.display = 'none';
+                area.innerHTML = `
+                    <div id="empty-msg" class="alert alert-info">Giỏ hàng của bạn đang trống!</div>
+                    <a href="/SanPham" class="btn btn-primary">Quay lại mua sắm</a>
+                `;
+            }
+            return;
+        }
+
+        rows.forEach(row => {
+            let qty = parseInt(row.querySelector('.qty-input').value) || 0;
+            let price = parseFloat(row.getAttribute('data-price')) || 0;
+            grandTotal += (qty * price);
+        });
+        
+        document.getElementById('grand-total').innerText = grandTotal.toLocaleString('vi-VN') + ' đ';
     }
 </script>

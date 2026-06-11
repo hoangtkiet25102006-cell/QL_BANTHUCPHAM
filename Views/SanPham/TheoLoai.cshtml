@@ -91,28 +91,42 @@ else
     }
 </style>
 <script>
-function addToCart(maSanPham) {
-    $.ajax({
-        url: '/GioHang/AddToCart', // Đường dẫn tới Controller/Action
-        type: 'POST',
-        data: { id: maSanPham },
-        success: function (response) {
-            // Cập nhật số lượng mới từ Server trả về vào thẻ <span class="cart-count">
-            $('.cart-count').text(response.totalItems);
-            
-            // Hiệu ứng nhẹ khi thêm thành công
-            alert('Đã thêm sản phẩm vào giỏ!');
-        },
-        error: function () {
-            alert('Vui lòng đăng nhập để thêm vào giỏ hàng.');
-        }
-    });
-}
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        container.innerHTML = ''; // Xóa thông báo cũ
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-message';
+        toast.innerText = message;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000); // Tự biến mất sau 3 giây
+    }
+    function addToCart(maSanPham) {
+        $.ajax({
+            url: '/GioHang/AddToCart', // Đường dẫn tới Controller/Action
+            type: 'POST',
+            data: { id: maSanPham },
+            success: function (response) {
+                // Cập nhật số lượng mới từ Server trả về vào thẻ <span class="cart-count">
+                $('.cart-count').text(response.totalItems);
+                
+                // Hiệu ứng nhẹ khi thêm thành công
+                showToast("Đã thêm thành công!");
+            },
+            error: function () {
+                alert('Vui lòng đăng nhập để thêm vào giỏ hàng.');
+            }
+        });
+    }
 
-// Gọi hàm này khi load trang để lấy số lượng giỏ hàng hiện tại (nếu có)
-$(document).ready(function() {
-    $.get('/GioHang/GetCartCount', function(data) {
-        $('.cart-count').text(data.totalItems);
+    // Gọi hàm này khi load trang để lấy số lượng giỏ hàng hiện tại (nếu có)
+    $(document).ready(function() {
+        $.get('/GioHang/GetCartCount', function(data) {
+            $('.cart-count').text(data.totalItems);
+        });
     });
-});
 </script>
