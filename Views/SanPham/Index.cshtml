@@ -1,0 +1,49 @@
+@model IEnumerable<QL_BANTHUCPHAM.Models.DanhMuc>
+
+@{
+    // Bản đồ map Mã Danh Mục với Emoji tương ứng
+    // Hãy thay đổi "DM01", "DM02" thành Mã Danh Mục thực tế trong Database của bạn
+    // Hoặc bạn có thể thay "DM01" bằng tên như "Rau củ", "Trái cây"...
+    Dictionary<string,string> iconMap = new Dictionary<string,string>
+    {
+        { "1", "🥦" },
+        { "2", "🥩" },
+        { "3", "🐟" },
+        { "4", "🍎" },
+        { "5", "🥛" }
+    };
+    
+    string defaultIcon = "🛒"; // Icon mặc định nếu không khớp tên
+}
+
+<h2 class="page-title">🥑 DANH MỤC THỰC PHẨM SẠCH 🥑</h2>
+
+<hr />
+
+<div class="danh-muc-grid">
+    @foreach (var dm in Model)
+    {
+       // Kiểm tra xem tên danh mục có trong map không, nếu không lấy mặc định
+        string currentIcon = iconMap.ContainsKey(dm.MaDanhMuc.ToString()) ? iconMap[dm.MaDanhMuc.ToString()] : defaultIcon;
+
+        <div class="card-danh-muc">
+            @* Thay đổi ở đây: Hiển thị icon động *@
+            <div class="card-icon">@currentIcon</div>
+            <h3>@dm.TenDanhMuc</h3>
+            <p>@dm.MoTa</p>
+            <a href="/SanPham/TheoLoai/@dm.MaDanhMuc" class="btn-chuyen-huong">Khám phá ngay</a>
+        </div>
+    }
+</div>
+
+<style>
+    .page-title { text-align: center; margin: 40px 0; color: #2e7d32; font-weight: bold; font-size: 28px; }
+    .danh-muc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 10px; }
+    .card-danh-muc { background: #ffffff; border-radius: 12px; padding: 30px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 2px solid transparent; }
+    .card-danh-muc:hover { transform: translateY(-8px); border-color: #2e7d32; box-shadow: 0 8px 25px rgba(46, 125, 50, 0.15); }
+    .card-icon { font-size: 40px; margin-bottom: 15px; }
+    .card-danh-muc h3 { color: #212121; margin-bottom: 12px; font-size: 20px; }
+    .card-danh-muc p { color: #666; font-size: 14px; min-height: 44px; margin-bottom: 20px; line-height: 1.5; }
+    .btn-chuyen-huong { display: inline-block; padding: 10px 24px; background-color: #2e7d32; color: white; border-radius: 25px; font-weight: bold; transition: background 0.2s; }
+    .btn-chuyen-huong:hover { background-color: #1b5e20; color: #ffeb3b; }
+</style>

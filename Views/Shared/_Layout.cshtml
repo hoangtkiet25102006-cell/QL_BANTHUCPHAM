@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Cửa Hàng Thực Phẩm Sạch</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QL_BanThucPham.styles.css" asp-append-version="true" />
+    <style>
+        /* === BỘ STYLE GIAO DIỆN HIỆN ĐẠI (TẶNG KÈM) === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Thanh Header */
+        .main-header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 12px 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Logo thương hiệu */
+        .logo a {
+            font-size: 24px;
+            font-weight: 700;
+            color: #28a745;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Thanh Tìm Kiếm */
+        .search-bar form {
+            display: flex;
+            align-items: center;
+            background: #f1f3f5;
+            border-radius: 30px;
+            padding: 4px 6px;
+            border: 1px solid #e9ecef;
+            min-width: 350px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            padding: 6px 12px;
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-bar button:hover {
+            background: #218838;
+        }
+
+        /* Thanh Menu Điều Hướng Gộp */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-menu-list a {
+            text-decoration: none;
+            color: #010101;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-menu-list a:hover {
+            color: #28a745;
+        }
+
+        /* Biểu tượng Giỏ Hàng */
+        .cart-icon a {
+            background: #e8f5e9;
+            color: #28a745 !important;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .cart-count {
+            background: #dc3545;
+            color: white;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            margin-left: 3px;
+        }
+
+        /* Khối Nội Dung Chính */
+        .content-container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Chân Trang Footer */
+        .main-footer {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 40px 0 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 100fr));
+            gap: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            color: #28a745;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-column ul a:hover {
+            color: #ffffff;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #343a40;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        /* --- Hiệu ứng nút Đăng nhập --- */
+        .nav-link-login {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link-login:hover {
+            color: #ffc107 !important; /* Đổi thành màu vàng khi hover */
+        }
+
+        /* Tạo đường gạch chân hiệu ứng chạy từ dưới chữ */
+        .nav-link-login::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffc107;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link-login:hover::after {
+            width: 100%; /* Đường gạch chân dài ra hết chữ khi hover */
+        }
+
+        /* --- Hiệu ứng nút Đăng ký --- */
+        .btn-register {
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-register:hover {
+            background-color: #157347 !important; /* Đổi màu xanh đậm hơn một chút */
+            border-color: #146c43 !important;
+            transform: translateY(-2px); /* Nhấc nhẹ nút lên tạo hiệu ứng 3D */
+            box-shadow: 0 6px 12px rgba(21, 115, 71, 0.3); /* Tạo đổ bóng phát sáng màu xanh */
+        }
+
+        .btn-register:active {
+            transform: translateY(0); /* Đè nút xuống khi click */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/">🥑 <span>Thực Phẩm Sạch</span></a>
+            </div>
+
+            <div class="search-bar">
+                <form action="/SanPham/Search" method="GET">
+                    <input type="text" name="keyword" placeholder="Tìm thịt heo, rau củ hữu cơ, trái cây sạch...">
+                    <button type="submit">Tìm kiếm</button>
+                </form>
+            </div>
+
+            <nav class="nav-menu">
+                <ul class="nav-menu-list">
+                    <li><a href="/">Trang Chủ</a></li>
+                    <li><a href="/SanPham">Sản Phẩm</a></li>
+                    <li class="cart-icon">
+                        <a href="/GioHang/Index" style="position: relative;">
+                            🛒 Giỏ Hàng 
+                            <span class="cart-count">0</span>
+                        </a>
+                    </li>
+
+                    <span class="text-muted d-none d-md-inline">|</span>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <span class="text-black">Xin chào, <b class="text-black">@(User.FindFirst("FullName")?.Value ?? User.Identity?.Name)</b>!</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-danger btn-sm px-3 rounded-pill" href="/Account/Logout">Đăng xuất</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white nav-link-login" href="/Account/Login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-success btn-sm text-white px-3 rounded-pill btn-register" href="/Account/Register">Đăng ký</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-container">
+        @RenderBody()
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Về Chúng Tôi</h3>
+                <p style="color: #adb5bd; line-height: 1.6;">Chuyên cung cấp thực phẩm tươi sống, nông sản hữu cơ, an toàn tuyệt đối cho bữa ăn sức khỏe của gia đình bạn mỗi ngày.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Chính Sách Cửa Hàng</h3>
+                <ul>
+                    <li><a href="#">Chính sách đổi trả hàng hóa</a></li>
+                    <li><a href="#">Chính sách vận chuyển siêu tốc</a></li>
+                    <li><a href="#">Chính sách bảo mật thông tin</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Thông Tin Liên Hệ</h3>
+                <p style="color: #adb5bd; margin-bottom: 8px;">📍 Địa chỉ: 123 Đường Nguyễn Trãi, Quận 5, TP. HCM</p>
+                <p style="color: #adb5bd; margin-bottom: 8px;">📞 Hotline tư vấn: 1900 60xx</p>
+                <p style="color: #adb5bd; margin-bottom: 8px;">✉️ Email: lienhe@thucphamsach.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; @DateTime.Now.Year Hệ thống Quản Lý Bán Thực Phẩm Sạch. Toàn bộ giao diện đã được bảo hộ tối ưu.</p>
+        </div>
+    </footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Tự động gọi API để lấy số lượng giỏ hàng khi load trang
+        $.ajax({
+            url: '/GioHang/GetCartCount',
+            type: 'GET',
+            success: function (data) {
+                $('.cart-count').text(data.totalItems);
+            },
+            error: function () {
+                console.log("Chưa đăng nhập hoặc giỏ hàng trống");
+            }
+        });
+    });
+</script>
+</html>

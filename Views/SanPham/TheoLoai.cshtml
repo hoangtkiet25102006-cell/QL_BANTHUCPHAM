@@ -1,0 +1,118 @@
+@model QL_BANTHUCPHAM.Models.DanhMuc
+
+<div style="margin: 20px 0;">
+    <a href="/SanPham" style="color: #2e7d32; font-weight: bold; text-decoration: none;">⬅️ Quay lại danh sách loại đồ ăn</a>
+</div>
+
+<h2 style="color: #1b5e20; margin-bottom: 30px;">Loại thực phẩm: <span style="color: #ff9100;">@Model.TenDanhMuc</span></h2>
+
+@if (Model.SanPhams == null || !Model.SanPhams.Any())
+{
+    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px;">
+        Hiện tại loại thực phẩm này đang hết hàng. Bạn vui lòng quay lại sau nhé!
+    </div>
+}
+else
+{
+    <div class="container my-4 px-0">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var sp in Model.SanPhams)
+            {
+                // Đoạn này xử lý tên file ảnh an toàn từ wwwroot/Images/
+                var imgName = string.IsNullOrEmpty(sp.HinhAnh) ? "default.jpg" : sp.HinhAnh.Trim().ToLower();
+                var imgPath = $"/Images/{imgName}";
+
+                <div class="col">
+                    <div class="card h-100 card-san-pham border-0 shadow-sm">
+                        
+                        <div class="product-img-box position-relative overflow-hidden">
+                            <img src="@imgPath" 
+                                 class="w-100 h-100 image-thumb" 
+                                 alt="@sp.TenSanPham" 
+                                 asp-append-version="true" />
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column justify-content-between product-details">
+                            <div>
+                                <h5 class="product-title fw-bold text-dark" title="@sp.TenSanPham">
+                                    @sp.TenSanPham
+                                </h5>
+                                <p class="card-text text-danger fw-bold fs-5 gia-ban m-0">@sp.GiaBan.ToString("#,##0") VNĐ</p>
+                                <p class="card-text text-muted small ton-kho mt-1 mb-3">Còn lại: @sp.SoLuongTonKho sản phẩm</p>
+                            </div>
+                            
+                            <button class="btn btn-success w-100 rounded-pill btn-mua py-2 fw-bold" 
+                            onclick="addToCart(@sp.MaSanPham)">
+                                <i class="fa-solid fa-cart-shopping me-2"></i> Thêm vào giỏ
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .card-san-pham { 
+        background: white; 
+        border-radius: 12px !important;
+        overflow: hidden; 
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .card-san-pham:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 12px 30px rgba(46, 125, 50, 0.15) !important;
+    }
+    .product-img-box { 
+        height: 200px; 
+        background: #f8f9fa; 
+    }
+    .image-thumb {
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .card-san-pham:hover .image-thumb {
+        transform: scale(1.06);
+    }
+    .product-details { 
+        padding: 1.25rem; 
+    }
+    .product-title {
+        font-size: 1rem;
+        line-height: 1.4;
+        height: 2.8em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+</style>
+<script>
+function addToCart(maSanPham) {
+    $.ajax({
+        url: '/GioHang/AddToCart', // Đường dẫn tới Controller/Action
+        type: 'POST',
+        data: { id: maSanPham },
+        success: function (response) {
+            // Cập nhật số lượng mới từ Server trả về vào thẻ <span class="cart-count">
+            $('.cart-count').text(response.totalItems);
+            
+            // Hiệu ứng nhẹ khi thêm thành công
+            alert('Đã thêm sản phẩm vào giỏ!');
+        },
+        error: function () {
+            alert('Vui lòng đăng nhập để thêm vào giỏ hàng.');
+        }
+    });
+}
+
+// Gọi hàm này khi load trang để lấy số lượng giỏ hàng hiện tại (nếu có)
+$(document).ready(function() {
+    $.get('/GioHang/GetCartCount', function(data) {
+        $('.cart-count').text(data.totalItems);
+    });
+});
+</script>

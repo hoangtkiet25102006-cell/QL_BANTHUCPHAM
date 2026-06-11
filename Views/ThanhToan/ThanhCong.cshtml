@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 text-center p-5">
+                <div class="mb-4">
+                    <i class="fa-solid fa-circle-check text-success" style="font-size: 80px;"></i>
+                </div>
+
+                <h2 class="text-success fw-bold mb-3">Đặt hàng thành công!</h2>
+                <p class="lead text-muted">Cảm ơn bạn đã mua sắm tại cửa hàng. Đơn hàng của bạn đã được ghi nhận vào hệ thống.</p>
+
+                <div class="alert alert-light border my-4">
+                    <h5>Mã đơn hàng của bạn là: <span class="text-primary">#@ViewBag.MaDonHang</span></h5>
+                    <p class="mb-0">Nhân viên của chúng tôi sẽ sớm liên hệ để xác nhận và giao hàng cho bạn.</p>
+                </div>
+
+                <div class="d-grid gap-2 d-md-block mt-4">
+                    <a href="/SanPham" class="btn btn-primary btn-lg px-4 me-md-2">Tiếp tục mua sắm</a>
+                    <a href="/Home/Index" class="btn btn-outline-secondary btn-lg px-4">Về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Thêm một chút đổ bóng cho card để đẹp hơn */
+    .card {
+        border-radius: 15px;
+    }
+</style>

@@ -1,0 +1,51 @@
+@model IEnumerable<QL_BANTHUCPHAM.Models.DongGioHang>
+
+<div class="container mt-5">
+    <h2>Thanh Toán Đơn Hàng</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>@( item.SanPham?.TenSanPham ?? "Sản phẩm không xác định")</td>
+                            <td>@item.SoLuongChon</td>
+                            <td>@((item.SoLuongChon * (item.SanPham?.GiaBan ?? 0)).ToString("N0")) đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="text-end border-top pt-2">
+                <h5>Tổng giá trị giỏ hàng: 
+                    <span class="text-danger fw-bold">
+                        @Model.Sum(x => x.SoLuongChon * (x.SanPham?.GiaBan ?? 0)).ToString("N0") đ
+                    </span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h4>Chọn phương thức</h4>
+                <form asp-action="XacNhanThanhToan" method="post">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="phuongThuc" value="TraTruoc" id="prepaid" checked>
+                        <label class="form-check-label" for="prepaid">Trả trước (Chuyển khoản MBBank)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="phuongThuc" value="TraSau" id="cod">
+                        <label class="form-check-label" for="cod">Trả sau (COD)</label>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3 w-100">Đặt hàng ngay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

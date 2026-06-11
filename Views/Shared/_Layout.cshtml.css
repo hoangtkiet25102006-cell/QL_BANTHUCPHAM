@@ -1,0 +1,30 @@
+﻿/* Reset cơ bản */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+body { display: flex; flex-direction: column; min-height: 100vh; }
+a { text-decoration: none; color: inherit; }
+
+/* CSS cho Header */
+.main-header { background-color: #2e7d32; color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+.header-container { width: 85%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.logo h1 { font-size: 24px; font-weight: bold; }
+.logo span { color: #ffeb3b; }
+
+.search-bar input { padding: 8px 15px; width: 300px; border: none; border-radius: 4px 0 0 4px; outline: none; }
+.search-bar button { padding: 8px 15px; background-color: #ffeb3b; border: none; color: #2e7d32; font-weight: bold; border-radius: 0 4px 4px 0; cursor: pointer; }
+
+.nav-menu ul { display: flex; list-style: none; gap: 20px; }
+.nav-menu a:hover { color: #ffeb3b; }
+.cart-count { background-color: #ff3d00; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; }
+
+/* CSS cho Phần thân */
+.content-container { flex: 1; width: 85%; margin: 20px auto; }
+
+/* CSS cho Footer */
+.main-footer { background-color: #212121; color: #bdbdbd; padding: 40px 0 10px 0; margin-top: auto; }
+.footer-container { width: 85%; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+.footer-column { flex: 1; }
+.footer-column h3 { color: white; margin-bottom: 15px; font-size: 18px; }
+.footer-column ul { list-style: none; }
+.footer-column ul li { margin-bottom: 8px; }
+.footer-column ul li a:hover { color: white; }
+.footer-bottom { text-align: center; border-top: 1px solid #424242; margin-top: 30px; padding-top: 15px; font-size: 14px; }

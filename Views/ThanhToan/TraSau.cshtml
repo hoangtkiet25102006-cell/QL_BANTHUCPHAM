@@ -1,0 +1,15 @@
+<div class="container">
+    <h3>Xác nhận giao hàng (COD)</h3>
+    <form asp-action="XacNhanThanhToan" method="post">
+        <input type="hidden" name="phuongThuc" value="TraSau" />
+        <div class="mb-3">
+            <label>Địa chỉ nhận hàng</label>
+            <input type="text" name="diaChi" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Số điện thoại</label>
+            <input type="text" name="sdt" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success">Hoàn tất đơn hàng</button>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+/* Reset cơ bản */
+*[b-0jvd04lqmi] { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+body[b-0jvd04lqmi] { display: flex; flex-direction: column; min-height: 100vh; }
+a[b-0jvd04lqmi] { text-decoration: none; color: inherit; }
+
+/* CSS cho Header */
+.main-header[b-0jvd04lqmi] { background-color: #2e7d32; color: white; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+.header-container[b-0jvd04lqmi] { width: 85%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.logo h1[b-0jvd04lqmi] { font-size: 24px; font-weight: bold; }
+.logo span[b-0jvd04lqmi] { color: #ffeb3b; }
+
+.search-bar input[b-0jvd04lqmi] { padding: 8px 15px; width: 300px; border: none; border-radius: 4px 0 0 4px; outline: none; }
+.search-bar button[b-0jvd04lqmi] { padding: 8px 15px; background-color: #ffeb3b; border: none; color: #2e7d32; font-weight: bold; border-radius: 0 4px 4px 0; cursor: pointer; }
+
+.nav-menu ul[b-0jvd04lqmi] { display: flex; list-style: none; gap: 20px; }
+.nav-menu a:hover[b-0jvd04lqmi] { color: #ffeb3b; }
+.cart-count[b-0jvd04lqmi] { background-color: #ff3d00; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; }
+
+/* CSS cho Phần thân */
+.content-container[b-0jvd04lqmi] { flex: 1; width: 85%; margin: 20px auto; }
+
+/* CSS cho Footer */
+.main-footer[b-0jvd04lqmi] { background-color: #212121; color: #bdbdbd; padding: 40px 0 10px 0; margin-top: auto; }
+.footer-container[b-0jvd04lqmi] { width: 85%; margin: 0 auto; display: flex; justify-content: space-between; gap: 40px; }
+.footer-column[b-0jvd04lqmi] { flex: 1; }
+.footer-column h3[b-0jvd04lqmi] { color: white; margin-bottom: 15px; font-size: 18px; }
+.footer-column ul[b-0jvd04lqmi] { list-style: none; }
+.footer-column ul li[b-0jvd04lqmi] { margin-bottom: 8px; }
+.footer-column ul li a:hover[b-0jvd04lqmi] { color: white; }
+.footer-bottom[b-0jvd04lqmi] { text-align: center; border-top: 1px solid #424242; margin-top: 30px; padding-top: 15px; font-size: 14px; }

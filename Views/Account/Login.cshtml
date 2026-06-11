@@ -1,0 +1,24 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Hoặc layout của bạn
+}
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center text-success">ĐĂNG NHẬP</h2>
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <form action="/Account/Login" method="post">
+        <div class="mb-3">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" name="username" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu</label>
+            <input type="password" name="password" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success w-100">Đăng nhập</button>
+    </form>
+    <p class="text-center mt-3">Chưa có tài khoản? <a href="/Account/Register">Đăng ký ngay</a></p>
+</div>
