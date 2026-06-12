@@ -16,6 +16,10 @@ namespace QL_BANTHUCPHAM.Models
         public DbSet<DongGioHang> DongGioHang { get; set; }
         public DbSet<DonHang> DonHang { get; set; }
         public DbSet<ChiTietDonHang> ChiTietDonHang { get; set; }
+        public DbSet<TichDiem> TichDiem { get; set; }
+        public DbSet<Voucher> Voucher { get; set; }
+        public DbSet<DanhGia> DanhGia { get; set; }
+        public DbSet<ThongBao> ThongBao { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +33,11 @@ namespace QL_BANTHUCPHAM.Models
             modelBuilder.Entity<DongGioHang>().ToTable("GioHang");
             modelBuilder.Entity<DonHang>().ToTable("DonHang");
             modelBuilder.Entity<ChiTietDonHang>().ToTable("ChiTietDonHang");
+
+            modelBuilder.Entity<TichDiem>().ToTable("TichDiem");
+            modelBuilder.Entity<Voucher>().ToTable("Voucher");
+            modelBuilder.Entity<DanhGia>().ToTable("DanhGia");
+            modelBuilder.Entity<ThongBao>().ToTable("ThongBao");
         }
     }
 }

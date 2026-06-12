@@ -13,6 +13,15 @@ namespace QL_BANTHUCPHAM.Controllers
     {
         private readonly AppDbContext _context;
 
+        private int GetSoLuongTon(int maSanPham)
+        {
+            // Tìm sản phẩm trong bảng SanPham (thay 'SanPham' bằng tên bảng của bạn)
+            var sanPham = _context.SanPham.FirstOrDefault(s => s.MaSanPham == maSanPham);
+            
+            // Trả về số lượng nếu tìm thấy, nếu không thì trả về 0
+            return sanPham != null ? sanPham.SoLuongTonKho : 0;
+        }
+
         public GioHangController(AppDbContext context)
         {
             _context = context;
@@ -21,54 +30,61 @@ namespace QL_BANTHUCPHAM.Controllers
         // 1. Hiển thị trang giỏ hàng chi tiết
         public IActionResult Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
+            try
             {
-                return RedirectToAction("Login","Account");
-            }
-            int userIdstr = int.Parse(userId);
-            var items = _context.DongGioHang
-                .Where(x => x.MaNguoiDung == userIdstr)
-                .Join(_context.SanPham,
-                      cart => cart.MaSanPham,
-                      prod => prod.MaSanPham,
-                      (cart, prod) => new { cart, prod })
-                .Select(x => new CartItemViewModel
-                {
-                    MaSanPham = x.prod.MaSanPham,
-                    TenSanPham = x.prod.TenSanPham ?? "san pham khong ten",
-                    GiaBan = x.prod.GiaBan,
-                    SoLuong = x.cart.SoLuongChon,
-                    HinhAnh = x.prod.HinhAnh ?? "Default.jpg"
-                }).ToList();
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
+                    return RedirectToAction("Login", "Account");
 
-            return View(items);
+                int userIdInt = int.Parse(userId);
+                var items = _context.DongGioHang
+                    .Where(x => x.MaNguoiDung == userIdInt)
+                    .Join(_context.SanPham,
+                        cart => cart.MaSanPham,
+                        prod => prod.MaSanPham,
+                        (cart, prod) => new { cart, prod })
+                    .Select(x => new CartItemViewModel
+                    {
+                        MaSanPham = x.prod.MaSanPham,
+                        TenSanPham = x.prod.TenSanPham ?? "san pham khong ten",
+                        GiaBan = x.prod.GiaBan,
+                        SoLuong = x.cart.SoLuongChon,  
+                        HinhAnh = x.prod.HinhAnh ?? "Default.jpg"
+                    }).ToList();
+
+                return View(items);
+            }
+            catch (Exception ex)
+            {
+                // Hiện lỗi thẳng ra màn hình để debug
+                return Content("LỖI: " + ex.Message + "\n\n" + ex.StackTrace);
+            }
         }
 
         // 2. AJAX: Thêm vào giỏ hàng (Cập nhật số lượng trên icon)
         [AllowAnonymous]
         [HttpPost]
-        [HttpPost]
-    public IActionResult UpdateCart(int maSanPham, int delta)
-    {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var item = _context.DongGioHang
-            .FirstOrDefault(x => x.MaNguoiDung == userId && x.MaSanPham == maSanPham);
-
-        if (item != null)
+        public IActionResult UpdateCart(int maSanPham, int delta)
         {
-            item.SoLuongChon += delta; // delta là +1 (tăng) hoặc -1 (giảm)
-            
-            if (item.SoLuongChon <= 0)
-                _context.DongGioHang.Remove(item);
-                
-            _context.SaveChanges();
-        }
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var item = _context.DongGioHang
+                .FirstOrDefault(x => x.MaNguoiDung == userId && x.MaSanPham == maSanPham);
 
-        // Trả về tổng số lượng mới để update icon và đơn giá cho mượt mà
-        int total = _context.DongGioHang.Where(x => x.MaNguoiDung == userId).Sum(x => x.SoLuongChon);
-        return Json(new { success = true, totalItems = total });
-    }
+            if (item != null)
+            {
+                item.SoLuongChon += delta; // delta là +1 (tăng) hoặc -1 (giảm)
+                
+                if (item.SoLuongChon <= 0)
+                    _context.DongGioHang.Remove(item);
+                    
+                _context.SaveChanges();
+            }
+            // Trả về tổng số lượng mới để update icon và đơn giá cho mượt mà
+            int total = _context.DongGioHang.Where(x => x.MaNguoiDung == userId).Sum(x => x.SoLuongChon);
+            return Json(new { success = true, 
+                        totalItems = total,});
+        }
+        [HttpPost]
         public IActionResult AddToCart(int id)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -78,9 +94,7 @@ namespace QL_BANTHUCPHAM.Controllers
                 }
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
-            
             int userId = int.Parse(userIdStr);
-
             // Kiểm tra sản phẩm đã có trong giỏ chưa
             var cartItem = _context.DongGioHang
                 .FirstOrDefault(x => x.MaNguoiDung == userId && x.MaSanPham == id);
@@ -99,14 +113,14 @@ namespace QL_BANTHUCPHAM.Controllers
             }
             
             _context.SaveChanges();
-
-            // Đếm tổng số lượng để cập nhật icon
-            int total = _context.DongGioHang
+            int totalMoi = _context.DongGioHang  // Tính lại SAU khi lưu
                 .Where(x => x.MaNguoiDung == userId)
                 .Sum(x => x.SoLuongChon);
-
-            return Json(new { totalItems = total });
-        }
+            int SoLuongTonMoi = GetSoLuongTon(id); // Lấy lại tồn kho MỚI sau khi cập nhật
+            return Json(new {  success = true,
+                            totalItems = totalMoi,
+                            TonKhoMoi = SoLuongTonMoi });
+            }
 
         // 3. AJAX: Lấy số lượng giỏ hàng ban đầu khi load trang
         [AllowAnonymous]

@@ -13,7 +13,6 @@ namespace QL_BANTHUCPHAM.Models
         public int SoLuongTonKho { get; set; }
         public string? MoTaChiTiet { get; set; }
         public DateTime? HanSuDung { get; set; }
-
         public int? MaDanhMuc { get; set; }
         [ForeignKey("MaDanhMuc")]
         public DanhMuc? DanhMuc { get; set; }

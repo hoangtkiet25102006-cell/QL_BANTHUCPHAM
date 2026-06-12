@@ -16,28 +16,42 @@
                         <th>Hình ảnh</th>
                         <th>Sản phẩm</th>
                         <th>Đơn giá</th>
-                        <th>Số lượng</th>
                         <th>Thành tiền</th>
-                        <th>Thao tác</th>
+                        <th>Thao tác số lượng</th>
+                        <th>Đơn vị</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         // Gán id="row-@item.MaSanPham" để JS tìm thấy và xóa
-                        <tr id="row-@item.MaSanPham" data-price="@item.GiaBan">
+                        <tr id="row-@item.MaSanPham" data-price="@item.GiaBan" data-qty="@item.SoLuong">
+
                             <td><img src="~/Images/@item.HinhAnh" width="60" class="rounded" /></td>
                             <td>@item.TenSanPham</td>
                             <td>@item.GiaBan.ToString("#,##0") đ</td>
-                            <td>
-                                <input type="text" class="qty-input" value="@item.SoLuong" readonly style="width: 40px; text-align: center;">
-                            </td>
                             <td class="price-item fw-bold text-danger">@item.ThanhTien.ToString("#,##0") đ</td>
                             <td>
-                                <button class="btn btn-sm btn-warning" onclick="updateCart(@item.MaSanPham, -1, 'row-@item.MaSanPham')">-</button>
+                                <div class="d-flex align-items-center gap-1">
+                                    <button class="btn btn-sm btn-outline-secondary px-2 py-1" 
+                                            onclick="updateCart(@item.MaSanPham, -1, 'row-@item.MaSanPham')">−</button>
+                                    
+                                    <input type="number" class="qty-input text-center border rounded" 
+                                        value="@item.SoLuong" min = "1"
+                                        style="width: 42px; height: 32px;"
+                                        onchange="updateCartManual(@item.MaSanPham, this, 'row-@item.MaSanPham')">
+                                    
+                                    <button class="btn btn-sm btn-outline-secondary px-2 py-1" 
+                                            onclick="updateCart(@item.MaSanPham, 1, 'row-@item.MaSanPham')">+</button>
+                                </div>
+                            </td>
+                            <td>
                                 <button class="btn btn-sm btn-danger" onclick="updateCart(@item.MaSanPham, -99, 'row-@item.MaSanPham')">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
+                            </td>
+                            <td>
+                                
                             </td>
                         </tr>
                     }
@@ -55,7 +69,7 @@
         }
     </div>
 </div>
-
+<div id="toast-container"></div>
 <script>
     // Hàm tạo và hiển thị thông báo
     function showToast(message) {
@@ -134,5 +148,37 @@
         });
         
         document.getElementById('grand-total').innerText = grandTotal.toLocaleString('vi-VN') + ' đ';
+    }
+    function updateCartManual(maSanPham, input, rowId) {
+        let newQty = parseInt(input.value);
+        
+        // Nếu nhập số không hợp lệ hoặc <= 0 thì reset về 1
+        if (isNaN(newQty) || newQty <= 0) {
+            input.value = 1;
+            newQty = 1;
+        }
+
+        let row = document.getElementById(rowId);
+        let oldQty = parseInt(row.getAttribute('data-qty') || 1);
+        let delta = newQty - oldQty; // Tính chênh lệch để gửi lên server
+
+        if (delta === 0) return; // Không thay đổi thì thôi
+
+        fetch('/GioHang/UpdateCart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `maSanPham=${maSanPham}&delta=${delta}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                $('.cart-count').text(data.totalItems);
+                row.setAttribute('data-qty', newQty); // Cập nhật lại data-qty
+                let price = parseFloat(row.getAttribute('data-price'));
+                row.querySelector('.price-item').innerText = (newQty * price).toLocaleString('vi-VN') + ' đ';
+                calculateTotal();
+                showToast("Cập nhật giỏ hàng thành công!");
+            }
+        });
     }
 </script>

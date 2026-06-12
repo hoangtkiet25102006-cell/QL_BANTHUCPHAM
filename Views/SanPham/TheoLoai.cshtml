@@ -38,7 +38,9 @@ else
                                     @sp.TenSanPham
                                 </h5>
                                 <p class="card-text text-danger fw-bold fs-5 gia-ban m-0">@sp.GiaBan.ToString("#,##0") VNĐ</p>
-                                <p class="card-text text-muted small ton-kho mt-1 mb-3">Còn lại: @sp.SoLuongTonKho sản phẩm</p>
+                                <p id="tonkho-@sp.MaSanPham" class="card-text text-muted small ton-kho mt-1 mb-3">
+                                    Còn lại: @sp.SoLuongTonKho sản phẩm
+                                </p>
                             </div>
                             
                             <button class="btn btn-success w-100 rounded-pill btn-mua py-2 fw-bold" 
@@ -91,7 +93,7 @@ else
     }
 </style>
 <script>
-    function showToast(message) {
+          function showToast(message) {
         const container = document.getElementById('toast-container');
         container.innerHTML = ''; // Xóa thông báo cũ
         
@@ -113,9 +115,15 @@ else
             success: function (response) {
                 // Cập nhật số lượng mới từ Server trả về vào thẻ <span class="cart-count">
                 $('.cart-count').text(response.totalItems);
+                if (response.success) { // Đảm bảo server trả về thuộc tính success
+                let tonKhoElement = document.getElementById('tonkho-' + maSanPham);
+                if (tonKhoElement) {
+                    tonKhoElement.innerText = "Còn lại: " + response.TonKhoMoi + " sản phẩm";
+                }
                 
-                // Hiệu ứng nhẹ khi thêm thành công
+                // 3. Hiệu ứng thông báo xanh
                 showToast("Đã thêm thành công!");
+            }
             },
             error: function () {
                 alert('Vui lòng đăng nhập để thêm vào giỏ hàng.');

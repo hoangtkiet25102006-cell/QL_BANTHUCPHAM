@@ -141,12 +141,14 @@ C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.cspro
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.RazorAssemblyInfo.cache
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.RazorAssemblyInfo.cs
+C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.sourcelink.json
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\scopedcss\bundle\QL_BanThucPham.styles.css
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\scopedcss\projectbundle\QL_BanThucPham.bundle.scp.css
+C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\d0cwzlrr9z-{0}-9r18w6tshh-9r18w6tshh.gz
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\osz6za36ni-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\2jvwjkdh47-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\edlarbklwi-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -221,5 +223,4 @@ C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\refint\QL_BanThucPha
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.pdb
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.genruntimeconfig.cache
 C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\ref\QL_BanThucPham.dll
-C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\QL_BanThucPham.sourcelink.json
-C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\d0cwzlrr9z-{0}-9r18w6tshh-9r18w6tshh.gz
+C:\Users\Kiet\source\repos\QL_BanThucPham\obj\Debug\net10.0\compressed\yb2mnr79vn-{0}-5ipweew5fc-5ipweew5fc.gz
