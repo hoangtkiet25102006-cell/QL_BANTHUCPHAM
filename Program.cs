@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 // Cấu hình Database kết nối thẳng tới SQL Server bằng chuỗi kết nối của bạn
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer("Server=MSI;Database=QL_BanThucPham;Trusted_Connection=True;TrustServerCertificate=True;"));
+    options.UseSqlServer("Server=.\\SQLEXPRESS;Database=QL_BanThucPham;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 // Thêm dịch vụ Xác thực bằng Cookie cho chức năng Đăng ký / Đăng nhập
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

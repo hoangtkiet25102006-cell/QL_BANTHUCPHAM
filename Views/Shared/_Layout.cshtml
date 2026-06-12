@@ -57,8 +57,9 @@
             align-items: center;
             background: #f1f3f5;
             border-radius: 30px;
-            padding: 4px 6px;
-            border: 1px solid #e9ecef;
+            /* padding: 4px 6px;
+            border: 1px solid #e9ecef; */
+            overflow: hidden;
             min-width: 350px;
         }
 
@@ -84,6 +85,7 @@
 
         .search-bar button:hover {
             background: #218838;
+            color: #ffeb3b;
         }
 
         /* Thanh Menu Điều Hướng Gộp */
@@ -174,14 +176,16 @@
         }
 
         .footer-column ul a {
+            display: inline-block; // Đảm bảo toàn bộ vùng chữ đều có hiệu ứng hover
             color: #adb5bd;
             text-decoration: none;
             transition: 0.2s;
         }
 
-        .footer-column ul a:hover {
+        .footer-column li:hover a {
             color: #ffffff;
-            padding-left: 5px;
+            /* padding-left: 5px; */
+            transform: translateX(5px);
         }
 
         .footer-bottom {
