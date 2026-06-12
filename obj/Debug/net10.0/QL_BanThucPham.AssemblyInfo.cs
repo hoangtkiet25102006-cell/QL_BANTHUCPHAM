@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QL_BanThucPham")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a4f0d2547f9d19a8fa2d36f0679d3a49912d929b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2980788ed69048f39466832fd903097467f6aee2")]
 [assembly: System.Reflection.AssemblyProductAttribute("QL_BanThucPham")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QL_BanThucPham")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
